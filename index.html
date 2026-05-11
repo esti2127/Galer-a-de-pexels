@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +11,40 @@
 //Página de inicio con categorías
 
 //Formulario que englobe:
+<form>
+  //Buscador de imágenes por palabras clave
+  <label for="image-search"></label>
+  <input type="search" id="image-search" placeholder="Buscar" />
+  <button type="submit">Buscar</button>
 
-//Buscador de imágenes por palabras clave
 
-//Filtro por orientación:Todas, Verticales, Horizontales.
+
+   //Filtro por orientación:Todas, Verticales, Horizontales.
+
+  <label for="orientacion">Orientación:</label>
+  <select id="orientacion" name="orientacion">
+  <option value="todos">Todas</option>
+  <option value="vertical">Vertical</option>
+  <option value="horizontal">Horizontal</option>
+  </select>
+  <button type="submit">Filtrar</button>
+
+
+
+</form>
+
+
 
 
 //Imágenenes por categoría:
+
+<section class="contenedorBotones" id="contenedorBotones">
+
+  <button class="boton"><img src="" alt=""></button>
+  <button class="boton"></button>
+  <button class="boton"></button>
+
+</section>
 
 
 //Categoría 1 ---- pero es un botón con una foto, NO UNA FOTO
@@ -31,6 +59,24 @@
 
 //Paginación
 
+<section class="paginación">
+  <ul>
+    <li><a href="" class="">1</a></li>
+    <li><a href=""></a>2</li>
+    <li><a href=""></a>3</li>
+    <li><a href=""></a>4</li>
+  </ul>
+</section>
+
+<!-- {
+  "page": 2,
+  "per_page": 40,
+  "total_results": 8000,
+  "next_page": "https://api.pexels.com/v1/curated?page=3&per_page=40",
+  "prev_page": "https://api.pexels.com/v1/curated?page=1&per_page=40"
+} -->
+
+
 
 
 
@@ -38,6 +84,6 @@
 //Favoritos ((añadir, mostrar, eliminar))
 
 
-//Sección con favoritas 
+//Sección con favoritas
 
 //*Luego se añades los IDs correspondientes a cada categoría
