@@ -1,28 +1,31 @@
 const imageSearch = document.querySelector('#image-search');
 const imageOrientacion = document.querySelector('#orientacion');
-const imageOrientacion = document.querySelector('.boton');
-
-const arrayBotones = [
-  {
-    id:0,
-    tag:naturaleza,
-  }
-]
+const botonImagen = document.querySelector('.boton');
 
 
 
-const boton = createElement("BUTTON")
+const boton = document.createElement("BUTTON")
 
 boton.classList.add("boton")
 
-const imagen = createElement("img")
+const imagen = document.createElement("img")
+
 
 const contenedorButton = document.getElementById("contenedorBotones")
 
+const arrayCategorias = ["naturaleza", "animales", "plantas"];
+//const API_KEY = 'fGhFoAuT6joFd5Xg1VpciXCPoGTi8Jgbanp1do5pSfXSlu1rzwBjPAi6'
 
 
+
+
+
+
+
+contenedorButton.append(boton)
 
 //Crear 3 categorías de imágenes en la página de inicio
+
 
 //VARIABLES
 
@@ -40,15 +43,19 @@ const contenedorButton = document.getElementById("contenedorBotones")
 
 document.addEventListener('click', () => {
   const inputSearch = document.getElementById('image-search');
+
+ 
+
 })
 
 
 
 //FUNCIONES
 
-const getallImages = async (tag) => {
+const getallImages = async (endpoint) => {
   try {
-    const resp = fetch('https://api.pexels.com/v1/search');
+
+    const resp = fetch(`https://api.pexels.com/v1/${endpoint}`, {headers: {"Authorization": "fGhFoAuT6joFd5Xg1VpciXCPoGTi8Jgbanp1do5pSfXSlu1rzwBjPAi6"}});
     if (!resp.ok) {
         
             throw (resp.status);
@@ -61,10 +68,16 @@ const getallImages = async (tag) => {
   }
 }
 
-getallImages().then(() => {
-    console.log(); 
+getallImages().then((categoria) => {
+    console.log("La categoria:", categoria);
 
-});
+})
+
+arrayCategorias.forEach(categoria => {getallImages(categoria)});
+
+
+boton.append(getallImages)
+
 
 //Función para que aparezcan las fotos de cada categoría al hacer click dividida en dos funciones:
 
