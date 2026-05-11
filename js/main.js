@@ -78,6 +78,8 @@ arrayCategorias.forEach(categoria => {getallImages(categoria)});
 
 boton.append(getallImages)
 
+console.log(getallImages)
+
 
 //Función para que aparezcan las fotos de cada categoría al hacer click dividida en dos funciones:
 
@@ -85,11 +87,28 @@ boton.append(getallImages)
 
 //Función 2: La que pinte las fotos en el DOM ----> recibe el array de las fotos y las pinta
 
+const pintarFotos = () => {}
+
 //Función para guardar los favoritos en el localStorage
 
+
+function guardarFavoritos(favorito) {
+localStorage.setItem("favorito", JSON.stringify(favorito));
+}
+
+const favoritosGuardados = JSON.parse(localStorage.getItem("favoritos"))
+
+
+
 //Función para poder eliminar las imágenes de la sección de favoritos 
+
+const eliminarFavorito = () => {
+  //imagenAñadidapreviamente.remove(). 
+}
 
 
 
 //Saver para que las fotos persistan incluso aunque se cierre la página
+
+
 
