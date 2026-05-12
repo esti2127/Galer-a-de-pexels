@@ -7,90 +7,31 @@
   <link rel="stylesheet" href="css/main.css">
   <title>Galería de pexels</title>
 </head>
-
-
 <body>
   <header>
-
     <h1>Galería de Pexels</h1>
-
-    <!-- Formulario que englobe: -->
-
-
     <button id="botonFavoritos">Mis Favoritos</button>
-
   </header>
-
   <main> <!-- Buscador de imágenes por palabras clave -->
     <div id="contenedorSearch">
       <input type="text" id="entradaBusqueda" placeholder="Buscar" />
       <button class="botonBuscar">Buscar</button>
     </div>
     <!-- Filtro por orientación:Todas, Verticales, Horizontales. -->
-      <label for="orientacion">Orientación:</label>
-      <select class="orientacion" id="orientacion" name="orientacion">
-        <option value="all">Todas</option>
-        <option value="portrait">Vertical</option>
-        <option value="landscape">Horizontal</option>
-      </select>
-      <button id="imagenesOrientacion" type="submit">Filtrar</button>
-
-    </form>
-
-    //Página de inicio con categorías
-
+    <label for="orientacion">Orientación:</label>
+    <select class="orientacion" id="orientacion" name="orientacion">
+      <option value="all">Todas</option>
+      <option value="portrait">Vertical</option>
+      <option value="landscape">Horizontal</option>
+    </select>
+    <button id="imagenesOrientacion" type="submit">Filtrar</button>
     <section class="contenedorBotones" id="contenedorBotones"></section>
-
-    //Imágenenes por categoría:
-
     <div id="mostrarImagenes" class="mostrarImagenes"></div>
-
-
     <nav id="paginacion" class="paginacion"></nav>
-
   </main>
-
-
-
-
-  </section>
-
-
-  //Categoría 1 ---- pero es un botón con una foto, NO UNA FOTO
-
-  //Categoría 2 ---- pero es un botón con una foto, NO UNA FOTO
-
-  //Categoría 3 ---- pero es un botón con una foto, NO UNA FOTO
-
-
-
-
-
-  //Paginación
-
-
-  <!-- {
-  "page": 2,
-  "per_page": 40,
-  "total_results": 8000,
-  "next_page": "https://api.pexels.com/v1/curated?page=3&per_page=40",
-  "prev_page": "https://api.pexels.com/v1/curated?page=1&per_page=40"
-} -->
-
-
-
-
-
-
-  //Favoritos ((añadir, mostrar, eliminar))
-
-
-  //Sección con favoritas
-
-  //*Luego se añades los IDs correspondientes a cada categoría
-
   <script src="js/main.js"></script>
 
 </body>
 <footer></footer>
+
 </html>

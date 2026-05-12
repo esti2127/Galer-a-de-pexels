@@ -11,6 +11,10 @@ const arrayOrientacion = ["landscape", "portrait"];
 
 document.addEventListener('click', async (event) => {
   const target = event.target;
+  if (target.id === 'botonFavoritos'){
+    verMisFavoritos();
+    return;
+  }
   if (target.closest('.botonBuscar') || (target.tagName === 'BUTTON' && target.parentElement.id === 'contenedorSearch')) {
     const input = document.getElementById('entradaBusqueda');
     const valor = input.value.trim();
@@ -92,6 +96,7 @@ const mostrarImagenes = (listaFotos = []) => {
       const btnFav = document.createElement("button");
       btnFav.textContent = "+";
       btnFav.classList.add("btn-fav");
+      btnFav.onclick=()=> agregarFavorito(foto)
       cajaImagen.append(nuevaImagen);
       cajaImagen.append(btnFav);
       contenedor.append(cajaImagen);
@@ -103,3 +108,25 @@ const mostrarImagenes = (listaFotos = []) => {
 };
 
 mostrarImagenes();
+
+const agregarFavorito=(foto)=>{
+  let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  const existe = favoritos.some(fav=> fav.id === foto.id);
+  if (!existe){
+    favoritos.push(foto);
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+  }else {
+    return 
+  }
+};
+
+const verMisFavoritos = ()=>{
+  const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  if (favoritos.length === 0){
+    contenedorImagenes.innerHTML = "<h3>Aqui no hay nada</h3>"
+    return;
+  } if(contenedorBotones){
+  contenedorBotones.innerHTML="<h2>Mis favoritos</h2>";
+}
+  mostrarImagenes(favoritos);
+};
