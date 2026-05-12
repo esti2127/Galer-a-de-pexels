@@ -15,38 +15,37 @@
     <h1>Galería de Pexels</h1>
 
     <!-- Formulario que englobe: -->
-    <form id="formSearch">
-      <!-- Buscador de imágenes por palabras clave -->
-      
-      <input type="search" id="imageSearch" placeholder="Buscar" />
-      <button type="submit">Buscar</button>
 
-    <!-- Filtro por orientación:Todas, Verticales, Horizontales. -->
-      <label for="orientacion">Orientación:</label>
-      <select class="orientacion" id="orientacion" name="orientacion">
-        <option value="all">Todas</option>
-        <option value="portrait">Vertical</option>
-        <option value="lanscape">Horizontal</option>
-      </select>
-      <button id="imagenesOrientacion" type="submit">Filtrar</button>
-
-    </form>
 
     <button id="botonFavoritos">Mis Favoritos</button>
 
   </header>
 
-  <main>
+  <main> <!-- Buscador de imágenes por palabras clave -->
+    <div id="contenedorSearch">
+      <input type="text" id="entradaBusqueda" placeholder="Buscar" />
+      <button type="submit">Buscar</button>
+    </div>
+    <!-- Filtro por orientación:Todas, Verticales, Horizontales. -->
+    <label for="orientacion">Orientación:</label>
+    <select class="orientacion" id="orientacion" name="orientacion">
+      <option value="all">Todas</option>
+      <option value="portrait">Vertical</option>
+      <option value="lanscape">Horizontal</option>
+    </select>
+    <button id="imagenesOrientacion" type="submit">Filtrar</button>
+
+    </form>
 
     //Página de inicio con categorías
 
     <section class="contenedorBotones" id="contenedorBotones"></section>
 
-     //Imágenenes por categoría:
+    //Imágenenes por categoría:
 
     <div id="mostrarImagenes"></div>
 
-   
+
     <nav id="paginacion" class="paginacion"></nav>
 
   </main>
@@ -69,7 +68,7 @@
 
   //Paginación
 
-  
+
   <!-- {
   "page": 2,
   "per_page": 40,

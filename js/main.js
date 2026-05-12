@@ -1,12 +1,7 @@
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VARIABLES
 const keyAPI = "fGhFoAuT6joFd5Xg1VpciXCPoGTi8Jgbanp1do5pSfXSlu1rzwBjPAi6";
-
 const urlAPI = "https://api.pexels.com/v1/";
-
-
-
-
-
 const formSearch = document.querySelector('#formSearch');
 const imageSearch = document.querySelector('#imageSearch');
 const imageOrientacion = document.querySelector('#orientacion');
@@ -14,33 +9,11 @@ const contenedorBotones = document.querySelector('#contenedorBotones')
 const contenedorFotos = document.querySelector('#galeriaFotos');
 const menuPaginacion = document.querySelector('#paginacion');
 const contenedorImagenes = document.getElementById("mostrarImagenes")
-// const primeraCategoria = document.querySelector('#boton1')
-// const segundaCategoria = document.querySelector('#boton2')
-// const terceraCategoria = document.querySelector('#boton3')
-
-
-
-// const arrayTodascategorias = [primeraCategoria, segundaCategoria, terceraCategoria];
-
-
-
 const boton = document.createElement("BUTTON")
-
-boton.classList.add("boton")
-
 const imagen = document.createElement("img")
-
-
 const contenedorButton = document.getElementById("contenedorBotones")
-
 const arrayCategorias = ["nature", "animals", "plants"];
-
 const arrayOrientacion = ["landscape", "portrait"];
-//const arrayCategorias = [{id: "nature", name: "naturaleza"}, {id: "animals", name: "animales"}, {id: "plants", name: "plantas"}];
-//const API_KEY = 'fGhFoAuT6joFd5Xg1VpciXCPoGTi8Jgbanp1do5pSfXSlu1rzwBjPAi6'
-
-
-contenedorButton.append(boton)
 
 //Crear 3 categorías de imágenes en la página de inicio
 
@@ -54,10 +27,8 @@ document.addEventListener('click', async (event) => {
     const boton = event.target.closest('.boton');
     if (boton){    
     const categoria = boton.dataset.categoria;
-    console.log("1. Categoría pulsada:", categoria);
         try {
             const fotos = await getAllImages(categoria);
-            console.log("2. ¿Qué hay en 'fotos'?:", fotos)
             mostrarImagenes(fotos);
             if (fotos){
                 mostrarImagenes(fotos);
@@ -68,6 +39,13 @@ document.addEventListener('click', async (event) => {
         }
     }
 });
+
+document.addEventListener('click', async (event)=>{
+  const botonBuscar = event.target.closest('.botonBuscar');
+  if (botonBuscar){
+    
+  }
+})
 
 
 //Crear imágenes representantes de su categoría (con su contenedor)
@@ -81,17 +59,6 @@ document.addEventListener('click', async (event) => {
 
 
 /**Hay que adaptar lo del carrito de la compra para que el botón de añadir en el contenedor de la imagen añada esa imagen a favoritos */
-
-// const botonAñadir = document.createElement("button");
-// botonAñadir.textContent = '+';
-
-// primeraCategoria.append(botonAñadir);
-// segundaCategoria.append(botonAñadir);
-// terceraCategoria.append(botonAñadir);
-
-// contenedorBotones.append(primeraCategoria)
-// contenedorBotones.append(segundaCategoria)
-// contenedorBotones.append(terceraCategoria)
 
 const getAllImages = async (categoria, orientation = "landscape") => {
     try {
@@ -197,7 +164,6 @@ function limpiarTabla() {
 
 }
 
-arrayCategorias.forEach(categoria => { mostrarImagenes(fotos) });
 
 //Saver para que las fotos persistan incluso aunque se cierre la página
 
@@ -206,84 +172,9 @@ arrayCategorias.forEach(categoria => { mostrarImagenes(fotos) });
 //Evento click en documento con imágenes para que aparezcan las fotos de cada categoria > click en una foto --(API Pexels)-->  aparecen las fotos de esa categoria 
 
 
-
-
-document.getElementById('imagenesOrientacion').addEventListener('click', (event) => {
-  const orientation = document.getElementById('orientacion').value;
-    imgOrientacion(orientation);
-})
-
-
-imageOrientacion.addEventListener('click', (event) => {
-  if (event.target.matches('.orientacion')) {
-    getallImages()
-
-    //filtrado según orientación (lanscape= horizontal, portrait = vertical, all = predeterminado)
-  }
-});
-
-  // contenedorBotones.addEventListener('click', (event) => {
-  //   const picture = event.target.matches('btn')
-  //   const fotosCategoria = getallImagesporCategoria(picture)
-  // })
-
- // const inputSearch = document.getElementById('imageSearch')
-
-contenedorBotones.addEventListener('submit', (ev) => {
-
-
-
-
-
-  //Restar favorito de la sección de favoritos
-
-  if (ev.target.matches('button')) {
-    restarFavorito(ev.target.classList.value);
-  }
-
-
-
-})
-
-
-
 //FUNCIONES
 
 /**Obtener fotos con la URL general */
-
-const getallImages = async (endpoint, orientation = "all") => {
-  try {
-
-    /**el await es necesario, sino no recibiriamos la foto de Pexels. Sin la autorizacion el el headers Pexels no te da las fotos. */
-
-    const resp = await fetch(`https://api.pexels.com/v1/search?query=${endpoint}&orientation=${orientation}&per_page=1`, {
-      headers: { "Authorization": keyAPI }
-    });
-
-    if(!resp.ok) {
-
-      throw (`Error:${resp.status}`);
-
-    }
-    /**json() nos devuelve la respuesta como objeto */
-    const data = await resp.json();
-    console.log(data)
-    return data.photos;
-  }
-  catch (error) {
-    console.log(`Error: ${error}`)
-  }
-};
-
-getallImages().then((data) => { 
-  
-  return data.photos;
-
- });
-
-
-arrayCategorias.forEach(categoria => {getallImages(categoria)});
-
 
 const fetchImagenes = async function (orientation) {
     // const apiKey = 'TU_API_KEY'; // Reemplazar con clave real (ej. Unsplash)
@@ -298,7 +189,6 @@ const fetchImagenes = async function (orientation) {
     // if (!response.ok) throw new Error('Error al obtener imágenes');
     // return await response.json();
 }
-
 
 const imgOrientacion = async function (orientation) {
     const container = document.getElementById('contenedorBotones');
@@ -332,93 +222,6 @@ const imgOrientacion = async function (orientation) {
     }
 }
 
-
-/**Obtener fotos con la URL general */
-
-const getallImagesporCategoria = async (categoria) => {
-  try {
-
-
-
-    const resp2 = await fetch(`https://api.pexels.com/v1/search?query=${categoria}&per_page=6`, {
-      headers: { "Authorization": keyAPI }
-    });
-
-    if(!resp2.ok) {
-
-      throw (`Error:${resp2.status}`);
-
-    }
-    /**json() nos devuelve la respuesta como objeto */
-    const data2 = await resp2.json();
-    return data2.photos;
-  }
-  catch (error) {
-    console.log(`Error: ${error}`)
-  }
-};
-
-getallImages().then((data2) => { 
-  
-  return data2.photos;
-
- });
-
-
-arrayCategorias.forEach(categoria => {getallImages(categoria)});
-
-
-
-
-const botonAñadir = document.createElement('button');
-
-botonAñadir.textContent = '+';
-
-boton.appendChild(botonAñadir);//aquí se mete el botón de añadir a favoritos dentro del contenendor. 
-
-
-
-
-//arrayCategorias.forEach(categoria => { getallImages(categoria) });
-
-/**Obtener fotos por id*/
-
-//Función para que aparezcan las fotos de cada categoría al hacer click dividida en dos funciones:
-
-//Función 1: La que se encarga de recoger el fetch 
-
-
-// const getallImagesporcategoria = async (categoria, index) => {
-
-//   arrayCategorias.forEach(async categoria => {
-
-//     try {
-//       const resp2 = await fetch(`https://api.pexels.com/v1/search?query=${categoria}&per_page=1`, { headers: { "Authorization": keyAPI } })
-
-//       if (!resp2.ok) {
-
-//         throw (resp2.status);
-//       }
-//       const data = await resp2.json();
-//       console.log(data.photos)
-
-//       pintarFotos(arrayTodascategorias[index]);
-
-//     }
-//     catch (error) {
-//       console.log(`Error ${error}`)
-//     }
-
-//   })
-
-// }
-
-// getallImagesporcategoria();
-
-
-//Función 2: La que pinte las fotos en el DOM ----> recibe el array de las fotos y las pinta
-
-
 const pintarporOrientacion = async (orientacion) => {
   contenedorBotones.innerHTML = "";
 try{
@@ -436,9 +239,7 @@ try{
 }
 };
 
-
 /**Función para guardar los favoritos en el localStorage*/
-
 
 function guardarFavoritos(favorito) {
   localStorage.setItem("favorito", JSON.stringify(favorito));
@@ -448,7 +249,4 @@ function guardarFavoritos(favorito) {
 const favoritosGuardados = JSON.parse(localStorage.getItem("favoritos"))
 
 //Saver para que las fotos persistan incluso aunque se cierre la página
-
-
-// getallImagesporcategoria();
 
