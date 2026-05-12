@@ -11,8 +11,18 @@ const arrayOrientacion = ["landscape", "portrait"];
 
 document.addEventListener('click', async (event) => {
   const target = event.target;
-  if (target.id === 'botonFavoritos'){
+  if (target.id === 'botonFavoritos') {
     verMisFavoritos();
+    return;
+  }
+  if (target.classList.contains('btn-fav')) {
+    const fotoData = JSON.parse(target.dataset.fotoInfo);
+    agregarFavorito(fotoData); // <-- Mira que aquí tenga la "r"
+    return;
+  }
+  if (target.classList.contains('btn-delete')) {
+    const fotoData = JSON.parse(target.dataset.fotoInfo);
+    eliminarFavorito(fotoData);
     return;
   }
   if (target.closest('.botonBuscar') || (target.tagName === 'BUTTON' && target.parentElement.id === 'contenedorSearch')) {
@@ -78,55 +88,64 @@ const pintarBoton = async () => {
 pintarBoton();
 
 
-const mostrarImagenes = (listaFotos = []) => {
-  const contenedor= document.getElementById('mostrarImagenes');
-  if (!contenedor) {
-    console.log("Error no hay contenedor")
-    return;
-  };
+const mostrarImagenes = (listaFotos = [], esFavorito = false) => {
+  const contenedor = document.getElementById('mostrarImagenes');
+  if (!contenedor) return;
   contenedorImagenes.innerHTML = "";
   listaFotos.forEach(foto => {
     try {
       const cajaImagen = document.createElement("div");
       cajaImagen.classList.add("caja-foto");
+
       const nuevaImagen = document.createElement('img');
       nuevaImagen.src = foto.src?.medium;
       nuevaImagen.alt = foto.alt;
       nuevaImagen.classList.add("FotoGaleria");
-      const btnFav = document.createElement("button");
-      btnFav.textContent = "+";
-      btnFav.classList.add("btn-fav");
-      btnFav.onclick=()=> agregarFavorito(foto)
-      cajaImagen.append(nuevaImagen);
-      cajaImagen.append(btnFav);
+      const btnAccion = document.createElement("button");
+      if (esFavorito) {
+        btnAccion.textContent = "X";
+        btnAccion.classList.add("btn-delete");
+      } else {
+        btnAccion.textContent = "+";
+        btnAccion.classList.add("btn-fav");
+      }
+      btnAccion.dataset.fotoInfo = JSON.stringify(foto);
+      cajaImagen.append(nuevaImagen, btnAccion);
       contenedor.append(cajaImagen);
-    }
-    catch (Error) {
+    } catch (error) {
       console.log("Error al crear imagen individual");
     }
-  })
+  });
 };
 
 mostrarImagenes();
 
-const agregarFavorito=(foto)=>{
+const agregarFavorito = (foto) => {
   let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-  const existe = favoritos.some(fav=> fav.id === foto.id);
-  if (!existe){
+  const existe = favoritos.some(fav => fav.id === foto.id);
+  if (!existe) {
     favoritos.push(foto);
     localStorage.setItem("favoritos", JSON.stringify(favoritos));
-  }else {
-    return 
+  } else {
+    return
   }
 };
 
-const verMisFavoritos = ()=>{
+const verMisFavoritos = () => {
   const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-  if (favoritos.length === 0){
-    contenedorImagenes.innerHTML = "<h3>Aqui no hay nada</h3>"
+  if (favoritos.length === 0) {
+    contenedorImagenes.innerHTML = "<h3>Aqui no hay nada</h3>";
     return;
-  } if(contenedorBotones){
-  contenedorBotones.innerHTML="<h2>Mis favoritos</h2>";
-}
-  mostrarImagenes(favoritos);
+  }
+  if (contenedorBotones) {
+    contenedorBotones.innerHTML = "<h2>Mis favoritos</h2>";
+  }
+  mostrarImagenes(favoritos, true);
+};
+
+const eliminarFavorito = (foto) => {
+  let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  favoritos = favoritos.filter(fav => fav.id !== foto.id);
+  localStorage.setItem("favoritos", JSON.stringify(favoritos));
+  verMisFavoritos();
 };
