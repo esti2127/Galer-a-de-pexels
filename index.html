@@ -10,68 +10,67 @@
 
 
 <body>
+  <header>
 
-//Página de inicio con categorías
+    <h1>Galería de Pexels</h1>
 
-//Formulario que englobe:
-<form>
-  //Buscador de imágenes por palabras clave
-  <label for="image-search"></label>
-  <input type="search" id="image-search" placeholder="Buscar" />
-  <button type="submit">Buscar</button>
+    <!-- Formulario que englobe: -->
+    <form id="formSearch">
+      <!-- Buscador de imágenes por palabras clave -->
+      
+      <input type="search" id="imageSearch" placeholder="Buscar" />
+      <button type="submit">Buscar</button>
 
+    <!-- Filtro por orientación:Todas, Verticales, Horizontales. -->
+      <label for="orientacion">Orientación:</label>
+      <select class="orientacion" id="orientacion" name="orientacion">
+        <option value="all">Todas</option>
+        <option value="portrait">Vertical</option>
+        <option value="lanscape">Horizontal</option>
+      </select>
+      <button id="imagenesOrientacion" type="submit">Filtrar</button>
 
+    </form>
 
-   //Filtro por orientación:Todas, Verticales, Horizontales.
+    <button id="botonFavoritos">Mis Favoritos</button>
 
-  <label for="orientacion">Orientación:</label>
-  <select id="orientacion" name="orientacion">
-  <option value="todos">Todas</option>
-  <option value="vertical">Vertical</option>
-  <option value="horizontal">Horizontal</option>
-  </select>
-  <button type="submit">Filtrar</button>
+  </header>
 
+  <main>
 
+    //Página de inicio con categorías
 
-</form>
+    <section class="contenedorBotones" id="contenedorBotones"></section>
 
+     //Imágenenes por categoría:
 
+    <section id="galeriaFotos" class="grid-fotos"></section>
 
+   
+    <nav id="paginacion" class="paginacion"></nav>
 
-//Imágenenes por categoría:
-
-<section class="contenedorBotones" id="contenedorBotones">
-
-  <button class="boton" id="boton1"><img src="" alt="">1</button>
-  <button class="boton" id="boton2">2</button>
-  <button class="boton" id="boton3">3</button>
-
-</section>
-
-
-//Categoría 1 ---- pero es un botón con una foto, NO UNA FOTO
-
-//Categoría 2 ---- pero es un botón con una foto, NO UNA FOTO
-
-//Categoría 3 ---- pero es un botón con una foto, NO UNA FOTO
+  </main>
 
 
 
 
+  </section>
 
-//Paginación
 
-<section class="paginación">
-  <ul>
-    <li><a href="" class="">1</a></li>
-    <li><a href=""></a>2</li>
-    <li><a href=""></a>3</li>
-    <li><a href=""></a>4</li>
-  </ul>
-</section>
+  //Categoría 1 ---- pero es un botón con una foto, NO UNA FOTO
 
-<!-- {
+  //Categoría 2 ---- pero es un botón con una foto, NO UNA FOTO
+
+  //Categoría 3 ---- pero es un botón con una foto, NO UNA FOTO
+
+
+
+
+
+  //Paginación
+
+  
+  <!-- {
   "page": 2,
   "per_page": 40,
   "total_results": 8000,
@@ -84,13 +83,13 @@
 
 
 
-//Favoritos ((añadir, mostrar, eliminar))
+  //Favoritos ((añadir, mostrar, eliminar))
 
 
-//Sección con favoritas
+  //Sección con favoritas
 
-//*Luego se añades los IDs correspondientes a cada categoría
+  //*Luego se añades los IDs correspondientes a cada categoría
 
-<script src="js/main.js"></script>
+  <script src="js/main.js"></script>
 
 </body>

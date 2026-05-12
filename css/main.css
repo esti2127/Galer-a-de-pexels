@@ -1,0 +1,15 @@
+* {
+  padding:0;
+  margin:0;
+  box-sizing: border-box;
+}
+
+.contenedorBotones {
+  flex-direction: row;
+  align-items: center;
+  margin: 50px 500px;
+}
+
+.boton {
+  margin: 0 10px;
+}
