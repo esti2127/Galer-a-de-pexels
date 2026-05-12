@@ -1,32 +1,229 @@
 * {
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
-header{
+
+.encabezadoFavoritos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  background-color: rgb(123, 123, 123);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap:15px;
-  padding-bottom: 15px;
-  padding-top: 15px;
+  text-align: center;
 }
-body{
+
+body {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
 }
+
+.tituloGaleria {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-family: "Open Sans", Helvetica, sans-serif
+}
+
+#botonFavoritos {
+  position: static;
+  top: 30px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 15px;
+  order: -1;
+}
+
+#botonFavoritos:hover {
+  background-color: #c0392b;
+}
+
+#contenedorSearch {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 20px 0;
+  gap: 10px;
+  justify-content: center;
+
+}
+
+#entradaBusqueda {
+  padding: 10px;
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+#botonBuscar,
+#imagenesOrientacion {
+  padding: 10px 20px;
+  background-color: rgb(144, 144, 144);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#botonBuscar:hover {
+  background-color: grey;
+}
+
 .contenedorBotones {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 50px 500px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 0 10px;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .boton {
-  margin: 0 10px;
+  position: relative;
+  width: 200px;
+  height: 120px;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+
 }
+
+.boton:hover {
+  transform: scale(1.05);
+}
+
+.boton img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+
+.boton span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+
+}
+
+#mostrarImagenes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 20px;
+  margin: 20px 50px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+#mostrarImagenes img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+
+}
+
+#orientacion {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* #galeriaFotos {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.cajaFoto {
+  margin:50px;
+}
+
+.fotoGaleria {
+  width:100%;
+  height: auto;
+}  */
+
+
+@media screen and (min-width:768px) {
+  /*768 px*/
+
+  #contenedorBotones {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .boton {
+    width: 150px;
+    /* Reducimos un poco el ancho para que quepan bien */
+    height: 100px;
+  }
+
+  #mostrarImagenes {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+
+  #entradaBusqueda {
+    width: 400px;
+  }
+
+
+}
+
+
+/* ===================992px======================== */
+
+@media screen and (min-width:992px) {
+
+  #botonFavoritos {
+    position: absolute; 
+    top: 20px;
+    right: 20px;
+    margin-bottom: 0;
+  }
+
+  #entradaBusqueda {
+    width: 400px;
+  }
+
+  .boton {
+    width: 220px;
+    height: auto;
+  }
+
+  #mostrarImagenes {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    padding: 40px;
+  }
+
+  #encabezadoFavoritos {
+    padding: 40px 20px;
+  }
+}
+
+/*992 px*/

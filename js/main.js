@@ -1,19 +1,35 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //VARIABLES
 const keyAPI = "fGhFoAuT6joFd5Xg1VpciXCPoGTi8Jgbanp1do5pSfXSlu1rzwBjPAi6";
-const urlAPI = "https://api.pexels.com/v1/";
-const formSearch = document.querySelector('#formSearch');
-const imageSearch = document.querySelector('#imageSearch');
-const imageOrientacion = document.querySelector('#orientacion');
-const contenedorBotones = document.querySelector('#contenedorBotones')
-const contenedorFotos = document.querySelector('#galeriaFotos');
-const menuPaginacion = document.querySelector('#paginacion');
-const contenedorImagenes = document.getElementById("mostrarImagenes")
-const boton = document.createElement("BUTTON")
-const imagen = document.createElement("img")
-const contenedorButton = document.getElementById("contenedorBotones")
+
 const arrayCategorias = ["nature", "animals", "plants"];
-const arrayOrientacion = ["landscape", "portrait"];
+
+const contenedorBotones = document.querySelector('#contenedorBotones')
+const contenedorImagenes = document.getElementById("mostrarImagenes")
+
+
+const botonFiltrar = document.getElementById('imagenesOrientacion');
+const selectOrientacion = document.getElementById('orientacion');
+
+const botonBuscarManual = document.getElementById('botonBuscar');
+const inputBusqueda = document.getElementById('entradaBusqueda');
+
+let categoriaActual = "nature";
+
+
+
+// const formSearch = document.querySelector('#formSearch');
+// const imageSearch = document.querySelector('#imageSearch');
+
+
+// const contenedorFotos = document.querySelector('#galeriaFotos');
+// const menuPaginacion = document.querySelector('#paginacion');
+
+// const boton = document.createElement("BUTTON")
+// const imagen = document.createElement("img")
+// const contenedorButton = document.getElementById("contenedorBotones")
+
+// const arrayOrientacion = ["landscape", "portrait"];
 
 //Crear 3 categorías de imágenes en la página de inicio
 
@@ -23,29 +39,79 @@ const arrayOrientacion = ["landscape", "portrait"];
 
 //EVENTOS
 
+////////////////////////EVENTO CLICK 3 BOTONES CATEGORIAS PRINCIPALES////////////////////////
+
 document.addEventListener('click', async (event) => {
-    const boton = event.target.closest('.boton');
-    if (boton){    
+  /**¿Lo qué he clickado es o está cerca de un botón? ----> */
+  const boton = event.target.closest('.boton');
+  if (boton) {
+    /**Lee la query que le hemos añadido al botón (ejemplo:nature) */
     const categoria = boton.dataset.categoria;
-        try {
-            const fotos = await getAllImages(categoria);
-            mostrarImagenes(fotos);
-            if (fotos){
-                mostrarImagenes(fotos);
-            }
+
+    categoriaActual = categoria;
+    
+    try {
+      /**Llama a la función getallImages para traer las 8 fotos de la categoría */
+      const fotos = await getAllImages(categoria);
+      /**Llama a la función mostrarImagenes que pinta las 8 imagenes */
+      mostrarImagenes(fotos);
+      
+    }
+    catch (Error) {
+      console.log("Error al cargar la galería de la categoría")
+    }
+  }
+});
+
+
+//////////////////////// EVENTO FILTRAR POR ORIENTACIÓN ////////////////////////
+
+
+
+botonFiltrar.addEventListener('click', async(event) => {
+  event.preventDefault();
+
+  const orientacionElegida = selectOrientacion.value;
+
+  console.log(`Filtrando ${categoriaActual} por orientación: ${orientacionElegida}`);
+
+  try {
+      const fotos = await getAllImages(categoriaActual, orientacionElegida);
+      
+      if (fotos) {
+          mostrarImagenes(fotos);
+      }
+  } catch (error) {
+      console.error("Error al filtrar por orientación:", error);
+  }
+
+});
+
+
+
+
+
+////////////////////////EVENTO CLICK BUSCADOR MANUAL////////////////////////
+
+botonBuscarManual.addEventListener('click', async () => {
+    const nuevaPalabra = inputBusqueda.value;
+    
+    if (nuevaPalabra) {
+        categoriaActual = nuevaPalabra;
+      try{
+        const fotos = await getAllImages(nuevaPalabra);
+        if(fotos){
+          mostrarImagenes(fotos);
         }
-        catch(Error){
-            console.log("Error")
-        }
+      }catch(error){
+        console.error("Error en la búsqueda manual:", error);
+      }
+      
     }
 });
 
-document.addEventListener('click', async (event)=>{
-  const botonBuscar = event.target.closest('.botonBuscar');
-  if (botonBuscar){
-    
-  }
-})
+
+
 
 
 //Crear imágenes representantes de su categoría (con su contenedor)
@@ -58,159 +124,207 @@ document.addEventListener('click', async (event)=>{
 
 
 
-/**Hay que adaptar lo del carrito de la compra para que el botón de añadir en el contenedor de la imagen añada esa imagen a favoritos */
+////////////////////////FUNCIÓN FOTOS API PEXELS SEGÚN CATEGORÍA Y ORIENTACIÓN////////////////////////
 
-const getAllImages = async (categoria, orientation = "landscape") => {
-    try {
-        const resp = await fetch(`https://api.pexels.com/v1/search?query=${categoria}&per_page=8`, {
-            headers: {
-                "Authorization": keyAPI
-            }
-        });
-        if (!resp.ok) {
-            throw (`Error: ${resp.status}`)
-        }
+const getAllImages = async (query, orientation = "all") => {
+  try {
 
-        const data = await resp.json();
-        return data.photos;
+    let url = `https://api.pexels.com/v1/search?query=${query}&per_page=8`;
+
+    if (orientation !== "all") {
+      url += `&orientation=${orientation}`;
     }
 
-    catch (error) {
-        console.log(`Error:${error}`)
+    const resp = await fetch(url, {
+      headers: { "Authorization": keyAPI }
+    });
+
+    if (!resp.ok) {
+      throw (`Error: ${resp.status}`)
     }
+
+    const data = await resp.json();
+    return data.photos;
+  }
+
+  catch (error) {
+    console.log(`Error:${error}`)
+  }
 };
 
-const pintarBoton = async (categoria) => {
-    contenedorBotones.innerHTML = "";
-    for (const categoria of arrayCategorias) {
-        const btn = document.createElement('button')
-        btn.classList.add('boton')
-        btn.dataset.categoria= categoria;
-        const imagenBoton = document.createElement('img')
-        const imagenes = await getAllImages(categoria);
-        if (imagenes.length > 0) {
-            imagenBoton.src = imagenes[0].src.small;//trycatch  
-        }
-        const nombreCategoria = document.createElement('p');
-        nombreCategoria.innerHTML = categoria;
-        btn.append(imagenBoton)
-        btn.append(nombreCategoria)
-        contenedorBotones.append(btn)
+
+
+
+
+
+
+////////////////////////FUNCIÓN PINTAR BOTONES FOTOS API PEXELS SEGÚN CATEGORÍA Y ORIENTACIÓN////////////////////////
+
+const pintarBoton = async () => {
+  contenedorBotones.innerHTML = "";
+
+  /**por cada categoría en el arrayCategorias haz lo siguiente: (se ejecutará 3 veces, porque hay 3 categorías en el array) */
+
+  for (const categoria of arrayCategorias) {
+
+    /**Crea un botón */
+    const btn = document.createElement('button')
+    /**Crea una imagen */
+    const imagenBoton = document.createElement('img')
+    /**Crea una etiqueta span para poner el nombre de la categoría */
+    const texto = document.createElement('span');
+
+    /**con await la función se detiene hasta que getallImages le pase fotos de la categoría correspondiente. Las fotos se guardan en la variable "imagenes" */
+
+    const imagenes = await getAllImages(categoria);
+
+    /**Si la lista no está vacía... (si la función devolvió fotos...) */
+    if (imagenes.length > 0) {
+
+      /**Tomamos la primera foto de la lista y nos quedamos con su ruta para ponérsela a nuestra imagen */
+      imagenBoton.src = imagenes[0].src.medium;//trycatch  
     }
+
+    /**Escribímos el nombre de la categoría dentro de span */
+
+    texto.textContent = categoria;
+
+    /**Metemos la imagen y el nombre de la categoría dentro del botón */
+    btn.append(imagenBoton);
+    btn.append(texto);
+    /**Le añadimos al botón la query correspondiente (ejemplo:nature) */
+    btn.dataset.categoria = categoria;
+    btn.classList.add('boton')
+
+    /**Metemos el botón en el contenedor de HTML para que se pueda ver en pantalla */
+
+    contenedorBotones.append(btn);
+
+  }
 };
 
+
+////////////////////////LLAMADA A LA FUNCIÓN PINTARBOTON()////////////////////////
 
 pintarBoton();
 
 
+
+
+
+
+
+
+
+
 const mostrarImagenes = (listaFotos = []) => {
-    contenedorImagenes.innerHTML = "";
-    try {
-        for (const foto of listaFotos) {
-            const nuevaImagen = document.createElement('img');
-            nuevaImagen.src = foto.src.medium;
-            nuevaImagen.alt = foto.alt || "Imagen";
-            contenedorImagenes.append(nuevaImagen)
-        }
-        console.log("Entra en try")
+  contenedorImagenes.innerHTML = "";
+  try {
+    for (const foto of listaFotos) {
+      const nuevaImagen = document.createElement('img');
+      nuevaImagen.src = foto.src.medium;
+      nuevaImagen.alt = foto.alt || "Imagen";
+      contenedorImagenes.append(nuevaImagen)
     }
-    catch (Error) {
-        console.log("Error") 
-    }
+    console.log("Entra en try")
+  }
+  catch (Error) {
+    console.log("Error")
+  }
 };
 
 mostrarImagenes();
 
-const agregarFavorito = favoritoElegido => {
-  /*
-    definimos el producto que cumplira la siguinete condición.
-    En este caso, buscaremos en el array de los productos,
-    el producto que cumpla la condición ----> (siguiente comentario)
-  */
-  const favoritoEncontrado = arrayProductos.find(producto => {
-    //el nombre del producto en la web y el producto elegido por el usuario coinciden 
-    return producto.nombre === productoElegido
-  })
+// const agregarFavorito = favoritoElegido => {
+//   /*
+//     definimos el producto que cumplira la siguinete condición.
+//     En este caso, buscaremos en el array de los productos,
+//     el producto que cumpla la condición ----> (siguiente comentario)
+//   */
+//   const favoritoEncontrado = arrayProductos.find(producto => {
+//     //el nombre del producto en la web y el producto elegido por el usuario coinciden 
+//     return producto.nombre === productoElegido
+//   })
 
-  if (typeof favoritoEncontrado === "undefined") {
-    //creamos el objeto con el producto nuevo.
-    const favoritoNuevo = { nombre: favoritoElegido, cantidad: 1 }
-    //lo añadimos al final del array de los productos
-    arrayProductos.push(favoritoNuevo);
-    aniadirFila(favoritoNuevo);
-  } else {
-    favoritoEncontrado.cantidad += 1;
-    seccionFavoritos.querySelector(`tr#${favoritoEncontrado.nombre}>td.celdaCantidad`).textContent = favoritoEncontrado.cantidad;
-  }
+//   if (typeof favoritoEncontrado === "undefined") {
+//     //creamos el objeto con el producto nuevo.
+//     const favoritoNuevo = { nombre: favoritoElegido, cantidad: 1 }
+//     //lo añadimos al final del array de los productos
+//     arrayProductos.push(favoritoNuevo);
+//     aniadirFila(favoritoNuevo);
+//   } else {
+//     favoritoEncontrado.cantidad += 1;
+//     seccionFavoritos.querySelector(`tr#${favoritoEncontrado.nombre}>td.celdaCantidad`).textContent = favoritoEncontrado.cantidad;
+//   }
 
-  // almacenamos el valor de arrayProductos
+//   // almacenamos el valor de arrayProductos
 
-  localStorage.setItem("arrayProductos", JSON.stringify(arrayProductos));
+//   localStorage.setItem("arrayProductos", JSON.stringify(arrayProductos));
 
-}
-
-
-function eliminarFavorito(imagen) {
-    //creamos constate donde almacenamosla funcion encargada de buscar el indice y eliminarlo
-    const indice = productos.findIndex(imagen => imagen.nombre === nombre);
-    if (indice !== -1) {
-        productos.splice(indice, 1);
-        localStorage.setItem("productos", JSON.stringify(productos));
-        pintarTabla();
-    }
-}
-
-function limpiarTabla() {
-
-}
+// }
 
 
-//Saver para que las fotos persistan incluso aunque se cierre la página
+// function eliminarFavorito(imagen) {
+//   //creamos constate donde almacenamosla funcion encargada de buscar el indice y eliminarlo
+//   const indice = productos.findIndex(imagen => imagen.nombre === nombre);
+//   if (indice !== -1) {
+//     productos.splice(indice, 1);
+//     localStorage.setItem("productos", JSON.stringify(productos));
+//     pintarTabla();
+//   }
+// }
 
-//EVENTOS
+// function limpiarTabla() {
 
-//Evento click en documento con imágenes para que aparezcan las fotos de cada categoria > click en una foto --(API Pexels)-->  aparecen las fotos de esa categoria 
-
-document.addEventListener('click', (event) => {
-  if (event.target.matches('btn')) {
-    getAllImages()
-  }
-
-});
-
-document.getElementById('imagenesOrientacion').addEventListener('click', (event) => {
-  const orientation = document.getElementById('orientacion').value;
-    imgOrientacion(orientation);
-})
+// }
 
 
-imageOrientacion.addEventListener('click', (event) => {
-  if (event.target.matches('.orientacion')) {
-    getallImages()
+// //Saver para que las fotos persistan incluso aunque se cierre la página
 
-    //filtrado según orientación (lanscape= horizontal, portrait = vertical, all = predeterminado)
-  }
-});
+// //EVENTOS
 
+// //Evento click en documento con imágenes para que aparezcan las fotos de cada categoria > click en una foto --(API Pexels)-->  aparecen las fotos de esa categoria 
 
-  // contenedorBotones.addEventListener('click', (event) => {
-  //   const picture = event.target.matches('btn')
-  //   const fotosCategoria = getallImagesporCategoria(picture)
-  // })
+// document.addEventListener('click', (event) => {
+//   if (event.target.matches('btn')) {
+//     getAllImages()
+//   }
 
- // const inputSearch = document.getElementById('imageSearch')
+// });
 
-contenedorBotones.addEventListener('submit', (ev) => {
-
-  //Restar favorito de la sección de favoritos
-
-  if (ev.target.matches('button')) {
-    restarFavorito(ev.target.classList.value);
-  }
+// document.getElementById('imagenesOrientacion').addEventListener('click', (event) => {
+//   const orientation = document.getElementById('orientacion').value;
+//   imgOrientacion(orientation);
+// })
 
 
+// imageOrientacion.addEventListener('click', (event) => {
+//   if (event.target.matches('.orientacion')) {
+//     getallImages()
 
-})
+//     //filtrado según orientación (lanscape= horizontal, portrait = vertical, all = predeterminado)
+//   }
+// });
+
+
+// // contenedorBotones.addEventListener('click', (event) => {
+// //   const picture = event.target.matches('btn')
+// //   const fotosCategoria = getallImagesporCategoria(picture)
+// // })
+
+// // const inputSearch = document.getElementById('imageSearch')
+
+// contenedorBotones.addEventListener('submit', (ev) => {
+
+//   //Restar favorito de la sección de favoritos
+
+//   if (ev.target.matches('button')) {
+//     restarFavorito(ev.target.classList.value);
+//   }
+
+
+
+// })
 
 
 
@@ -218,55 +332,58 @@ contenedorBotones.addEventListener('submit', (ev) => {
 
 /**Obtener fotos con la URL general */
 
-const getallImages = async (endpoint, orientation = "all") => {
-  try {
+// const getallImages = async (query, orientation = "all") => {
+//   try {
 
-    let url = `https://api.pexels.com/v1/search?query=${endpoint}&per_page=8`;
+//     let url = `https://api.pexels.com/v1/search?query=${query}&per_page=8`;
 
-    const resp = await fetch(url, {
-      headers: { "Authorization": keyAPI }
-    });
-    
-    if (orientation !== "all") {
-      resp += `&orientation=${orientation}`;
-    }
+//     if (orientation !== "all") {
+//       resp += `&orientation=${orientation}`;
+//     }
 
-    if(!resp.ok) {
-
-      throw (`Error:${resp.status}`);
-
-    }
-    /**json() nos devuelve la respuesta como objeto */
-    const data = await resp.json();
-    console.log(data)
-    return data.photos;
-  }
-  catch (error) {
-    console.log(`Error: ${error}`)
-  }
-};
-
-getallImages().then((data) => { 
-  
-  return data.photos;
-
- });
+//     const resp = await fetch(url, {
+//       headers: { "Authorization": keyAPI }
+//     });
 
 
-arrayCategorias.forEach(categoria => {getallImages(categoria)});
+
+//     if (!resp.ok) {
+
+//       throw (`Error:${resp.status}`);
+
+//     }
+
+//     /**json() nos devuelve la respuesta como objeto */
+//     const data = await resp.json();
+//     console.log(data)
+//     return data.photos;
+//   }
+//   catch (error) {
+//     console.log(`Error al obtener las imágenes: ${error}`)
+//   }
+// };
+
+// getallImages().then((data) => { 
+
+//   return data.photos;
+
+//  });
+
+
+// arrayCategorias.forEach(categoria => {getallImages(categoria)});
 
 // const fetchImagenes = async function (orientation) {
 //     // const apiKey = 'TU_API_KEY'; // Reemplazar con clave real (ej. Unsplash)
 //     // let url = `https://unsplash.com{apiKey}`;
-    
+
 //     // Añadir parámetro de orientación si no es 'all'
 //     if (orientation !== 'all') {
 //         url += `&orientation=${orientation}`;
 //     }
 
-    // const response = await fetch(url);
-    // if (!response.ok) throw new Error('Error al obtener imágenes');
-    // return await response.json();
+// const response = await fetch(url);
+// if (!response.ok) throw new Error('Error al obtener imágenes');
+// return await response.json();
 // }
 
 
@@ -289,7 +406,7 @@ arrayCategorias.forEach(categoria => {getallImages(categoria)});
 //     const data = await resp.json();
 
 //       const images = await fetchImages(orientation);
-      
+
 //       container.innerHTML = '';
 //       data.forEach(img => {
 //           const imgElement = document.createElement('img');
@@ -329,22 +446,22 @@ arrayCategorias.forEach(categoria => {getallImages(categoria)});
 // };
 
 // getallImages().then((data2) => { 
-  
+
 //   return data2.photos;
 
 //  });
 
 
-arrayCategorias.forEach(categoria => {getallImages(categoria)});
+// arrayCategorias.forEach(categoria => { getallImages(categoria) });
 
 
 
 
-const botonAñadir = document.createElement('button');
+// const botonAñadir = document.createElement('button');
 
-botonAñadir.textContent = '+';
+// botonAñadir.textContent = '+';
 
-boton.appendChild(botonAñadir);//aquí se mete el botón de añadir a favoritos dentro del contenendor. 
+// boton.appendChild(botonAñadir);//aquí se mete el botón de añadir a favoritos dentro del contenendor. 
 
 //arrayCategorias.forEach(categoria => { getallImages(categoria) });
 
@@ -386,36 +503,42 @@ boton.appendChild(botonAñadir);//aquí se mete el botón de añadir a favoritos
 
 const pintarporOrientacion = async (orientacion) => {
   contenedorBotones.innerHTML = "";
-try{
-    for (const orientacion of arrayOrientacion) { 
-    const imagenOrientacion = document.createElement('img')
-    const imagenesOrientacion = await getallImages(orientation);
-    if (imagenes.length > 0) {
-      imagenBoton.src = imagenes[0].src.small;
-    }
-    const nombreOrientacion = document.createElement('p');
-    nombreOrientacion.innerHTML = orientacion;
+  try {
+    for (const orientacion of arrayOrientacion) {
+      const imagenOrientacion = document.createElement('img')
+      const imagenesOrientacion = await getallImages(orientation);
+      if (imagenes.length > 0) {
+        imagenBoton.src = imagenes[0].src.small;
+      }
+      const nombreOrientacion = document.createElement('p');
+      nombreOrientacion.innerHTML = orientacion;
 
-  }}catch (error){
-  throw error;
-}
+    }
+  } catch (error) {
+    throw error;
+  }
 };
 const pintarFotos = (fotos) => {
   const contenedorFotos = document.getElementById('galeriaFotos');
-  contenedorBotones.innerHTML="";
+  contenedorBotones.innerHTML = "";
 
   fotos.forEach(foto => {
 
     const fotoElement = createElement("img");
+    const cajaImagen = createElement("div");
 
     img.src = foto.src.medium;
     img.alt = foto.alt;
     fotoElement.classList.add("fotoGaleria")
+    cajaImagen.classList.add("cajaFoto")
 
-    contenedorFotos.append(fotoElement)
+    cajaImagen.append(fotoElement)
+
+    contenedorFotos.append(cajaImagen)
 
 
-  })}
+  })
+}
 
 
 

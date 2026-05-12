@@ -4,15 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/main.css">
+
+   <link rel="stylesheet" href="css/main.css">
   <title>Galería de pexels</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  
 </head>
 
 
 <body>
-  <header>
+  <header class="encabezadoFavoritos">
 
-    <h1>Galería de Pexels</h1>
+    <h1 class="tituloGaleria">Galería de Pexels</h1>
 
     <!-- Formulario que englobe: -->
 
@@ -24,7 +30,7 @@
   <main> <!-- Buscador de imágenes por palabras clave -->
     <div id="contenedorSearch">
       <input type="text" id="entradaBusqueda" placeholder="Buscar" />
-      <button type="submit">Buscar</button>
+      <button type="submit" id="botonBuscar">Buscar</button>
     </div>
     <!-- Filtro por orientación:Todas, Verticales, Horizontales. -->
       <label for="orientacion">Orientación:</label>
@@ -35,38 +41,19 @@
       </select>
       <button id="imagenesOrientacion" type="submit">Filtrar</button>
 
-    </form>
 
-    //Página de inicio con categorías
+    <!-- Sección de categorías -->
 
     <section class="contenedorBotones" id="contenedorBotones"></section>
 
-    //Imágenenes por categoría:
+    <!-- Galería -->
 
-    <div id="mostrarImagenes"></div>
+    <div id="mostrarImagenes" class="grid-fotos"></div>
 
 
     <nav id="paginacion" class="paginacion"></nav>
 
   </main>
-
-
-
-
-  </section>
-
-
-  //Categoría 1 ---- pero es un botón con una foto, NO UNA FOTO
-
-  //Categoría 2 ---- pero es un botón con una foto, NO UNA FOTO
-
-  //Categoría 3 ---- pero es un botón con una foto, NO UNA FOTO
-
-
-
-
-
-  //Paginación
 
 
   <!-- {
@@ -76,18 +63,6 @@
   "next_page": "https://api.pexels.com/v1/curated?page=3&per_page=40",
   "prev_page": "https://api.pexels.com/v1/curated?page=1&per_page=40"
 } -->
-
-
-
-
-
-
-  //Favoritos ((añadir, mostrar, eliminar))
-
-
-  //Sección con favoritas
-
-  //*Luego se añades los IDs correspondientes a cada categoría
 
   <script src="js/main.js"></script>
 
