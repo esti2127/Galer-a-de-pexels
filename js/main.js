@@ -171,10 +171,6 @@ function limpiarTabla() {
 
 //Evento click en documento con imágenes para que aparezcan las fotos de cada categoria > click en una foto --(API Pexels)-->  aparecen las fotos de esa categoria 
 
-
-
-
-
 document.addEventListener('click', (event) => {
   if (event.target.matches('btn')) {
     getAllImages()
@@ -188,15 +184,6 @@ document.getElementById('imagenesOrientacion').addEventListener('click', (event)
 })
 
 
-
-
-
-
-
-
-
-
-
 imageOrientacion.addEventListener('click', (event) => {
   if (event.target.matches('.orientacion')) {
     getallImages()
@@ -206,57 +193,14 @@ imageOrientacion.addEventListener('click', (event) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // contenedorBotones.addEventListener('click', (event) => {
   //   const picture = event.target.matches('btn')
   //   const fotosCategoria = getallImagesporCategoria(picture)
   // })
 
-
-
-
-
  // const inputSearch = document.getElementById('imageSearch')
 
-
-
-
-
-
-
-
-
 contenedorBotones.addEventListener('submit', (ev) => {
-
-
-
-
 
   //Restar favorito de la sección de favoritos
 
@@ -311,13 +255,6 @@ getallImages().then((data) => {
 
 arrayCategorias.forEach(categoria => {getallImages(categoria)});
 
-
-
-
-
-
-
-
 // const fetchImagenes = async function (orientation) {
 //     // const apiKey = 'TU_API_KEY'; // Reemplazar con clave real (ej. Unsplash)
 //     // let url = `https://unsplash.com{apiKey}`;
@@ -366,26 +303,6 @@ arrayCategorias.forEach(categoria => {getallImages(categoria)});
 // }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**Obtener fotos con la URL general */
 
 // / const getallImagesporCategoria = async (categoria) => {
@@ -429,9 +346,6 @@ botonAñadir.textContent = '+';
 
 boton.appendChild(botonAñadir);//aquí se mete el botón de añadir a favoritos dentro del contenendor. 
 
-
-
-
 //arrayCategorias.forEach(categoria => { getallImages(categoria) });
 
 /**Obtener fotos por id*/
@@ -468,59 +382,7 @@ boton.appendChild(botonAñadir);//aquí se mete el botón de añadir a favoritos
 
 // getallImagesporcategoria();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //Función 2: La que pinte las fotos en el DOM ----> recibe el array de las fotos y las pinta
-
-
-const pintarBoton = async (categoria) => {
-  contenedorBotones.innerHTML = "";
-try{
-    for (const categoria of arrayCategorias) {
-    const btn = document.createElement('button')
-    btn.classList.add('boton')
-    const imagenBoton = document.createElement('img')
-    const imagenes = await getallImages(categoria);
-    if (imagenes.length > 0) {
-      imagenBoton.src = imagenes[0].src.small;
-    }
-    const nombreCategoria = document.createElement('p');
-    nombreCategoria.innerHTML = categoria;
-    btn.append(imagenBoton)
-    btn.append(nombreCategoria)
-    contenedorBotones.append(btn)
-
-  }}catch (error){
-  throw error;
-}
-};
-
-pintarBoton();
-
-
-
-
-
 
 const pintarporOrientacion = async (orientacion) => {
   contenedorBotones.innerHTML = "";
