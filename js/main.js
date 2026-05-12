@@ -330,7 +330,7 @@ arrayCategorias.forEach(categoria => {getallImages(categoria)});
     // const response = await fetch(url);
     // if (!response.ok) throw new Error('Error al obtener imágenes');
     // return await response.json();
-}
+// }
 
 
 // const imgOrientacion = async function (orientation) {
@@ -353,17 +353,17 @@ arrayCategorias.forEach(categoria => {getallImages(categoria)});
 
 //       const images = await fetchImages(orientation);
       
-      container.innerHTML = '';
-      data.forEach(img => {
-          const imgElement = document.createElement('img');
-          imgElement.src = img.urls.small;
-          container.append(imgElement);
-      });
-    } catch (error) {
-        container.innerHTML = 'Error al cargar las imágenes';
-        console.error(error);
-    }
-}
+//       container.innerHTML = '';
+//       data.forEach(img => {
+//           const imgElement = document.createElement('img');
+//           imgElement.src = img.urls.small;
+//           container.append(imgElement);
+//       });
+//     } catch (error) {
+//         container.innerHTML = 'Error al cargar las imágenes';
+//         console.error(error);
+//     }
+// }
 
 
 
@@ -388,8 +388,8 @@ arrayCategorias.forEach(categoria => {getallImages(categoria)});
 
 /**Obtener fotos con la URL general */
 
-/ const getallImagesporCategoria = async (categoria) => {
-//   try {
+// / const getallImagesporCategoria = async (categoria) => {
+// //   try {
 
 
 
