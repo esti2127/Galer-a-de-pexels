@@ -15,12 +15,17 @@
     <h1>Galería de Pexels</h1>
 
     <!-- Formulario que englobe: -->
-    <form id="formSearch">
-      <!-- Buscador de imágenes por palabras clave -->
-      
-      <input type="search" id="imageSearch" placeholder="Buscar" />
-      <button type="submit">Buscar</button>
 
+
+    <button id="botonFavoritos">Mis Favoritos</button>
+
+  </header>
+
+  <main> <!-- Buscador de imágenes por palabras clave -->
+    <div id="contenedorSearch">
+      <input type="text" id="entradaBusqueda" placeholder="Buscar" />
+      <button type="submit">Buscar</button>
+    </div>
     <!-- Filtro por orientación:Todas, Verticales, Horizontales. -->
       <label for="orientacion">Orientación:</label>
       <select class="orientacion" id="orientacion" name="orientacion">
@@ -32,21 +37,15 @@
 
     </form>
 
-    <button id="botonFavoritos">Mis Favoritos</button>
-
-  </header>
-
-  <main>
-
     //Página de inicio con categorías
 
     <section class="contenedorBotones" id="contenedorBotones"></section>
 
-     //Imágenenes por categoría:
+    //Imágenenes por categoría:
 
-    <section id="galeriaFotos" class="grid-fotos"></section>
+    <div id="mostrarImagenes"></div>
 
-   
+
     <nav id="paginacion" class="paginacion"></nav>
 
   </main>
@@ -69,7 +68,7 @@
 
   //Paginación
 
-  
+
   <!-- {
   "page": 2,
   "per_page": 40,
