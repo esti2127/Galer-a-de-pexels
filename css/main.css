@@ -4,7 +4,14 @@
   box-sizing: border-box;
 }
 
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 .contenedorBotones {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin: 50px 500px;
