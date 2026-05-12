@@ -126,10 +126,19 @@ document.addEventListener('click', (event) => {
 
 });
 
-document.getElementById('imagenesOrientacion').addEventListener('click', (event) => {
-  const orientation = document.getElementById('orientacion').value;
-    imgOrientacion(orientation);
+document.getElementById('formSearch').addEventListener('submit', async(event) => {
+  event.preventDefault();
+  const busqueda = document.getElementById('imageSearch').value;
+  const orientacionSeleccionada = document.getElementById('orientacion').value;
+  const fotos = await getallImages(busqueda, orientacionSeleccionada);
+
+  if (fotos) {
+    pintarFotos(fotos);
+  }
+
 })
+
+
 
 
 
@@ -218,11 +227,15 @@ contenedorBotones.addEventListener('submit', (ev) => {
 const getallImages = async (endpoint, orientation = "all") => {
   try {
 
-    /**el await es necesario, sino no recibiriamos la foto de Pexels. Sin la autorizacion el el headers Pexels no te da las fotos. */
+    let url = `https://api.pexels.com/v1/search?query=${endpoint}&per_page=8`;
 
-    const resp = await fetch(`https://api.pexels.com/v1/search?query=${endpoint}&orientation=${orientation}&per_page=1`, {
+    const resp = await fetch(url, {
       headers: { "Authorization": keyAPI }
     });
+    
+    if (orientation !== "all") {
+      resp += `&orientation=${orientation}`;
+    }
 
     if(!resp.ok) {
 
@@ -239,68 +252,68 @@ const getallImages = async (endpoint, orientation = "all") => {
   }
 };
 
-getallImages().then((data) => { 
+// getallImages().then((data) => { 
   
-  return data.photos;
+//   return data.photos;
 
- });
-
-
-arrayCategorias.forEach(categoria => {getallImages(categoria)});
+//  });
 
 
+// arrayCategorias.forEach(categoria => {getallImages(categoria)});
 
 
 
 
 
 
-const fetchImagenes = async function (orientation) {
-    // const apiKey = 'TU_API_KEY'; // Reemplazar con clave real (ej. Unsplash)
-    // let url = `https://unsplash.com{apiKey}`;
+
+
+// const fetchImagenes = async function (orientation) {
+//     // const apiKey = 'TU_API_KEY'; // Reemplazar con clave real (ej. Unsplash)
+//     // let url = `https://unsplash.com{apiKey}`;
     
-    // Añadir parámetro de orientación si no es 'all'
-    if (orientation !== 'all') {
-        url += `&orientation=${orientation}`;
-    }
+//     // Añadir parámetro de orientación si no es 'all'
+//     if (orientation !== 'all') {
+//         url += `&orientation=${orientation}`;
+//     }
 
-    // const response = await fetch(url);
-    // if (!response.ok) throw new Error('Error al obtener imágenes');
-    // return await response.json();
-}
+//     // const response = await fetch(url);
+//     // if (!response.ok) throw new Error('Error al obtener imágenes');
+//     // return await response.json();
+// }
 
 
-const imgOrientacion = async function (orientation) {
-    const container = document.getElementById('contenedorBotones');
-    container.innerHTML = '';
+// const imgOrientacion = async function (orientation) {
+//     const container = document.getElementById('contenedorBotones');
+//     container.innerHTML = '';
 
-    try {
-      const resp = await fetch(`https://api.pexels.com/v1/search?query=${endpoint}&orientation=${orientation}&per_page=1`, {
-      headers: { "Authorization": keyAPI }
+//     try {
+//       const resp = await fetch(`https://api.pexels.com/v1/search?query=${endpoint}&orientation=${orientation}&per_page=1`, {
+//       headers: { "Authorization": keyAPI }
 
-    });
+//     });
 
-    if(!resp.ok) {
+//     if(!resp.ok) {
 
-      throw (`Error:${resp.status}`);
+//       throw (`Error:${resp.status}`);
 
-    }
+//     }
 
-    const data = await resp.json();
+//     const data = await resp.json();
 
-      const images = await fetchImages(orientation);
+//       const images = await fetchImages(orientation);
       
-      container.innerHTML = '';
-      data.forEach(img => {
-          const imgElement = document.createElement('img');
-          imgElement.src = img.urls.small;
-          container.append(imgElement);
-      });
-    } catch (error) {
-        container.innerHTML = 'Error al cargar las imágenes';
-        console.error(error);
-    }
-}
+//       container.innerHTML = '';
+//       data.forEach(img => {
+//           const imgElement = document.createElement('img');
+//           imgElement.src = img.src.small;
+//           container.append(imgElement);
+//       });
+//     } catch (error) {
+//         container.innerHTML = 'Error al cargar las imágenes';
+//         console.error(error);
+//     }
+// }
 
 
 
@@ -325,37 +338,37 @@ const imgOrientacion = async function (orientation) {
 
 /**Obtener fotos con la URL general */
 
-const getallImagesporCategoria = async (categoria) => {
-  try {
+// const getallImagesporCategoria = async (categoria) => {
+//   try {
 
 
 
-    const resp2 = await fetch(`https://api.pexels.com/v1/search?query=${categoria}&per_page=6`, {
-      headers: { "Authorization": keyAPI }
-    });
+//     const resp2 = await fetch(`https://api.pexels.com/v1/search?query=${categoria}&per_page=6`, {
+//       headers: { "Authorization": keyAPI }
+//     });
 
-    if(!resp2.ok) {
+//     if(!resp2.ok) {
 
-      throw (`Error:${resp2.status}`);
+//       throw (`Error:${resp2.status}`);
 
-    }
-    /**json() nos devuelve la respuesta como objeto */
-    const data2 = await resp2.json();
-    return data2.photos;
-  }
-  catch (error) {
-    console.log(`Error: ${error}`)
-  }
-};
+//     }
+//     /**json() nos devuelve la respuesta como objeto */
+//     const data2 = await resp2.json();
+//     return data2.photos;
+//   }
+//   catch (error) {
+//     console.log(`Error: ${error}`)
+//   }
+// };
 
-getallImages().then((data2) => { 
+// getallImages().then((data2) => { 
   
-  return data2.photos;
+//   return data2.photos;
 
- });
+//  });
 
 
-arrayCategorias.forEach(categoria => {getallImages(categoria)});
+// arrayCategorias.forEach(categoria => {getallImages(categoria)});
 
 
 
@@ -475,6 +488,37 @@ try{
   throw error;
 }
 };
+
+
+
+
+
+
+const pintarFotos = (fotos) => {
+  const contenedorFotos = document.getElementById('galeriaFotos');
+  contenedorBotones.innerHTML="";
+
+  fotos.forEach(foto => {
+
+    const fotoElement = createElement("img");
+
+    img.src = foto.src.medium;
+    img.alt = foto.alt;
+    fotoElement.classList.add("fotoGaleria")
+
+    contenedorFotos.append(fotoElement)
+
+
+  })}
+
+
+
+
+
+
+
+
+
 
 
 
