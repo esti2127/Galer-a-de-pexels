@@ -27,6 +27,14 @@ body{
   margin: 50px 500px;
 }
 
+.mostrarImagenes{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+
+}
+
 .boton {
   margin: 0 10px;
 }
