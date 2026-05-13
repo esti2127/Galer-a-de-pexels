@@ -1,4 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //VARIABLES
 const keyAPI = "fGhFoAuT6joFd5Xg1VpciXCPoGTi8Jgbanp1do5pSfXSlu1rzwBjPAi6";
 
@@ -14,8 +15,9 @@ const selectOrientacion = document.getElementById('orientacion');
 const botonBuscarManual = document.getElementById('botonBuscar');
 const inputBusqueda = document.getElementById('entradaBusqueda');
 
-let categoriaActual = "nature";
+/**Asignamos un valor inicial para la categoría para que, en caso de que el usuario filtre nada más entrar en la web sin haber elegido una categoría, la web no de error y y tenga algo que mostrar, en este caso, las imagenes de la categoria "nature" */
 
+let categoriaActual = "nature";
 
 
 // const formSearch = document.querySelector('#formSearch');
@@ -31,20 +33,14 @@ let categoriaActual = "nature";
 
 // const arrayOrientacion = ["landscape", "portrait"];
 
-//Crear 3 categorías de imágenes en la página de inicio
-
-
-//VARIABLES
-
-
 //EVENTOS
 
 ////////////////////////EVENTO CLICK 3 BOTONES CATEGORIAS PRINCIPALES////////////////////////
 
 document.addEventListener('click', async (event) => {
+
   /**¿Lo qué he clickado es o está cerca de un botón? ----> */
-  const boton = event.target.closest('.boton');
-  if (boton) {
+  if (event.target.closest('.boton')) {
     /**Lee la query que le hemos añadido al botón (ejemplo:nature) */
     const categoria = boton.dataset.categoria;
 
@@ -61,24 +57,66 @@ document.addEventListener('click', async (event) => {
       console.log("Error al cargar la galería de la categoría")
     }
   }
+
+
+
+
+
+
+
+   const target = event.target;
+  if (target.id === 'botonFavoritos') {
+    verMisFavoritos();
+    return;
+  }
+  if (target.classList.contains('btn-fav')) {
+    const fotoData = JSON.parse(target.dataset.fotoInfo);
+    agregarFavorito(fotoData); // <-- Mira que aquí tenga la "r"
+    return;
+  }
+  if (target.classList.contains('btn-delete')) {
+    const fotoData = JSON.parse(target.dataset.fotoInfo);
+    eliminarFavorito(fotoData);
+    return;
+  }
+  if (target.closest('.botonBuscar') || (target.tagName === 'BUTTON' && target.parentElement.id === 'contenedorSearch')) {
+    const input = document.getElementById('entradaBusqueda');
+    const valor = input.value.trim();
+
+    if (valor) {
+      console.log("Buscando:", valor);
+      const resultados = await getAllImages(valor);
+      mostrarImagenes(resultados);
+    }
+    return;
+  }
+  const btnCat = target.closest('.boton');
+  if (btnCat) {
+    const cat = btnCat.dataset.categoria;
+    console.log("Categoría pulsada:", cat);
+    const resultados = await getAllImages(cat);
+    mostrarImagenes(resultados);
+  }
 });
 
 
 //////////////////////// EVENTO FILTRAR POR ORIENTACIÓN ////////////////////////
 
 
-
 botonFiltrar.addEventListener('click', async(event) => {
-  event.preventDefault();
 
+  /**Evitamos que la página se recargue */
+  event.preventDefault();
+  /**Leemos lo que el usuario ha marcado en el desplegable (horizontal, vertical, todas) */
   const orientacionElegida = selectOrientacion.value;
 
-  console.log(`Filtrando ${categoriaActual} por orientación: ${orientacionElegida}`);
+  // console.log(`Filtrando ${categoriaActual} por orientación: ${orientacionElegida}`);
 
   try {
       const fotos = await getAllImages(categoriaActual, orientacionElegida);
-      
+      /**Si tenemos fotos */
       if (fotos) {
+        /**Pinta las nuevas imagenes filtradas */
           mostrarImagenes(fotos);
       }
   } catch (error) {
@@ -91,16 +129,21 @@ botonFiltrar.addEventListener('click', async(event) => {
 
 
 
+
 ////////////////////////EVENTO CLICK BUSCADOR MANUAL////////////////////////
 
 botonBuscarManual.addEventListener('click', async () => {
+    /**Captura la búsqueda del usuario */
     const nuevaPalabra = inputBusqueda.value;
-    
+    /**Verificamos que el buscador no está vacío */
     if (nuevaPalabra) {
+      /**Actualizamos la categoría que se busca */
         categoriaActual = nuevaPalabra;
       try{
+        /**Pedimos las fotos de la nueva palabra */
         const fotos = await getAllImages(nuevaPalabra);
         if(fotos){
+          /**Pinta los resultados de la búsqueda */
           mostrarImagenes(fotos);
         }
       }catch(error){
@@ -126,15 +169,20 @@ botonBuscarManual.addEventListener('click', async () => {
 
 ////////////////////////FUNCIÓN FOTOS API PEXELS SEGÚN CATEGORÍA Y ORIENTACIÓN////////////////////////
 
+/**La orientacion por defecto será "all" */
 const getAllImages = async (query, orientation = "all") => {
   try {
 
+    /**Creamos la URL básica con la categoría elegida */
+
     let url = `https://api.pexels.com/v1/search?query=${query}&per_page=8`;
+
+    /**Y si el usuario ha elegido una orientación diferente a la predeterminada la añadimos a la url para que aparezcan las imagenenes filtradas por orientacion y por categoría */
 
     if (orientation !== "all") {
       url += `&orientation=${orientation}`;
     }
-
+    /**. Fetch realiza la petición. Sin el pase VIP (nuestra API) Pexels no nos deja ver las fotos */
     const resp = await fetch(url, {
       headers: { "Authorization": keyAPI }
     });
@@ -143,7 +191,11 @@ const getAllImages = async (query, orientation = "all") => {
       throw (`Error: ${resp.status}`)
     }
 
+    /**Pasamos la respuesta a un objeto legible */
+
     const data = await resp.json();
+
+    /**Queremos el array con las fotos, no todo el objeto */
     return data.photos;
   }
 
@@ -151,8 +203,6 @@ const getAllImages = async (query, orientation = "all") => {
     console.log(`Error:${error}`)
   }
 };
-
-
 
 
 
@@ -182,7 +232,7 @@ const pintarBoton = async () => {
     if (imagenes.length > 0) {
 
       /**Tomamos la primera foto de la lista y nos quedamos con su ruta para ponérsela a nuestra imagen */
-      imagenBoton.src = imagenes[0].src.medium;//trycatch  
+      imagenBoton.src = imagenes[0].src.medium;
     }
 
     /**Escribímos el nombre de la categoría dentro de span */
@@ -217,23 +267,44 @@ pintarBoton();
 
 
 
-const mostrarImagenes = (listaFotos = []) => {
+
+
+
+
+
+const mostrarImagenes = (listaFotos = [], esFavorito = false) => {
+  const contenedor = document.getElementById('mostrarImagenes');
+  if (!contenedor) return;
   contenedorImagenes.innerHTML = "";
-  try {
-    for (const foto of listaFotos) {
+  listaFotos.forEach(foto => {
+    try {
+      const cajaImagen = document.createElement("div");
+      cajaImagen.classList.add("caja-foto");
+
       const nuevaImagen = document.createElement('img');
-      nuevaImagen.src = foto.src.medium;
-      nuevaImagen.alt = foto.alt || "Imagen";
-      contenedorImagenes.append(nuevaImagen)
+      nuevaImagen.src = foto.src?.medium;
+      nuevaImagen.alt = foto.alt;
+      nuevaImagen.classList.add("FotoGaleria");
+      const btnAccion = document.createElement("button");
+      if (esFavorito) {
+        btnAccion.textContent = "X";
+        btnAccion.classList.add("btn-delete");
+      } else {
+        btnAccion.textContent = "+";
+        btnAccion.classList.add("btn-fav");
+      }
+      btnAccion.dataset.fotoInfo = JSON.stringify(foto);
+      cajaImagen.append(nuevaImagen, btnAccion);
+      contenedor.append(cajaImagen);
+    } catch (error) {
+      console.log("Error al crear imagen individual");
     }
-    console.log("Entra en try")
-  }
-  catch (Error) {
-    console.log("Error")
-  }
+  });
+
 };
 
 mostrarImagenes();
+
 
 // const agregarFavorito = favoritoElegido => {
 //   /*
@@ -545,16 +616,35 @@ const pintarFotos = (fotos) => {
 
 
 
-
-
-/**Función para guardar los favoritos en el localStorage*/
-
-function guardarFavoritos(favorito) {
-  localStorage.setItem("favorito", JSON.stringify(favorito));
-}
-
-/**Recuperar objeto de favoritos del Local Storage */
-const favoritosGuardados = JSON.parse(localStorage.getItem("favoritos"))
-
 //Saver para que las fotos persistan incluso aunque se cierre la página
 
+const agregarFavorito = (foto) => {
+  let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  const existe = favoritos.some(fav => fav.id === foto.id);
+  if (!existe) {
+    favoritos.push(foto);
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+  } else {
+    return
+  }
+};
+
+const verMisFavoritos = () => {
+  const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  if (favoritos.length === 0) {
+    contenedorImagenes.innerHTML = "<h3>Aqui no hay nada</h3>";
+    return;
+  }
+  if (contenedorBotones) {
+    contenedorBotones.innerHTML = "<h2>Mis favoritos</h2>";
+  }
+  mostrarImagenes(favoritos, true);
+};
+
+
+const eliminarFavorito = (foto) => {
+  let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  favoritos = favoritos.filter(fav => fav.id !== foto.id);
+  localStorage.setItem("favoritos", JSON.stringify(favoritos));
+  verMisFavoritos();
+};

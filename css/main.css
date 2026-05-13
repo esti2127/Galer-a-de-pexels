@@ -95,6 +95,14 @@ body {
   margin-top: 20px;
 }
 
+.mostrarImagenes{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+
+}
+
 .boton {
   position: relative;
   width: 200px;
